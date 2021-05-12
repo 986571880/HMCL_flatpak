@@ -37,6 +37,7 @@ modules:
           - cp opt/pure-writer/lib/pure-writer-Pure_Writer.desktop purewriter.desktop
           - desktop-file-edit --set-key="Exec" --set-value="purewriter" purewriter.desktop
           - desktop-file-edit --set-icon="$FLATPAK_ID" purewriter.desktop
+          - desktop-file-edit --set-key="StartupWMClass" --set-value="com-drakeet-purewriter-Wwwwwww" purewriter.desktop
           - cp opt/pure-writer/lib/Pure_Writer.png purewriter.png
           - install -Dm644 purewriter.desktop export/share/applications/${FLATPAK_ID}.desktop
           - install -Dm644 purewriter.png export/share/icons/hicolor/128x128/apps/${FLATPAK_ID}.png
