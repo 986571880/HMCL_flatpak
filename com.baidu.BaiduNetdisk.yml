@@ -1,10 +1,10 @@
 app-id: com.baidu.BaiduNetdisk
 default-branch: stable
 runtime: org.freedesktop.Platform
-runtime-version: '20.08'
+runtime-version: '21.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
-base-version: '20.08'
+base-version: '21.08'
 command: baidunetdisk
 tags: 
   - proprietary
@@ -18,6 +18,7 @@ finish-args:
   - --persist=.config
   - --filesystem=xdg-download
   - --talk-name=org.freedesktop.Notifications
+
 modules:
   - name: baidunetdisk
     buildsystem: simple
@@ -35,8 +36,8 @@ modules:
           - tar xf data.tar.xz
           - rm baidudisk.deb control.tar.* data.tar.* debian-binary 
           - FLATPAK_ID=com.baidu.BaiduNetdisk
-          - desktop-file-edit --set-key="Exec" --set-value="baidunetdisk %U" usr/share/applications/baidunetdisk.desktop
-          - desktop-file-edit --set-icon="$FLATPAK_ID" usr/share/applications/baidunetdisk.desktop
+          - desktop-file-edit --set-icon="$FLATPAK_ID" --set-key="Exec" --set-value="baidunetdisk %U" 
+            usr/share/applications/baidunetdisk.desktop
           - install -Dm644 usr/share/applications/baidunetdisk.desktop -t export/share/applications
           - install -Dm644 usr/share/icons/hicolor/scalable/apps/baidunetdisk.svg -t export/share/icons/hicolor/scalable/apps
           - rename "baidunetdisk" "$FLATPAK_ID" export/share/{applications,icons/hicolor/*/apps}/baidunetdisk.*
