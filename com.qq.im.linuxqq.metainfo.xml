@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>com.qq.im.linuxqq</id>
+  <name>QQ</name>
+  <summary>A cloud-based HD conferencing product leveraging Tencent's 20+ years of experience in audiovisual communications</summary>
+  <developer_name>Tencent</developer_name>
+  <launchable type="desktop-id">com.qq.im.linuxqq.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LicenseRef-proprietary=https://wemeet.tencent.com/declare.html</project_license>
+  <icon type="remote">https://dldir1.qq.com/download/packages/logo3.png</icon>
+  <description>
+    <p>Tencent Meeting, An Expert in Conferencing</p>
+    <p>NOTE: This wrapper is not verified by, affiliated with, or supported by Tencent, inc.</p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://meeting.tencent.com/packages/meeting-public/first-page/web/bg_2_2x.png</image>
+    </screenshot>
+  </screenshots>
+  <releases>
+    <release version="2.0.1" date="2022-12-7"/>
+  </releases>
+  <url type="homepage">https://im.qq.com/</url>
+  <categories>
+    <category>Office</category>
+    <category>Chat</category>
+    <category>Audio</category>
+  </categories>
+  <content_rating type="oars-1.1"/>
+</component>

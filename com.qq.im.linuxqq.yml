@@ -1,0 +1,99 @@
+app-id: com.qq.im.linuxqq
+base: org.electronjs.Electron2.BaseApp
+base-version: '21.08'
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+separate-locales: false
+command: qq
+finish-args:
+- --share=ipc
+- --share=network
+- --socket=x11
+- --socket=wayland
+- --socket=pulseaudio
+- --device=dri
+- --persist=.pki
+- --talk-name=org.freedesktop.Notifications
+- --talk-name=org.kde.StatusNotifierWatcher
+- --system-talk-name=org.freedesktop.login1
+
+modules:
+  - name: krb5
+    subdir: src
+    config-opts:
+      - --localstatedir=/var/lib
+      - --sbindir=${FLATPAK_DEST}/bin
+      - --disable-static
+      - --disable-rpath
+    sources:
+      - type: archive
+        url: https://github.com/krb5/krb5/archive/refs/tags/krb5-1.20-final.tar.gz
+        sha256: cbbf7ff2fb25d44cf3ed6fee120c073cd291af2bdcc3f466433f0482e238fb59
+        x-checker-data:
+          type: anitya
+          project-id: 13287
+          stable-only: true
+          url-template: https://github.com/krb5/krb5/archive/refs/tags/krb5-$version.tar.gz
+      - type: shell
+        dest: src
+        commands:
+          - autoreconf -si
+    cleanup:
+      - /bin
+      - /lib/pkgconfig
+      - /share/et
+      - /share/examples
+      - /share/man
+    modules:
+      - name: krb5-config
+        buildsystem: simple
+        build-commands:
+          - install -Dm 644 krb5.conf -t /app/etc
+        sources:
+          - type: file
+            path: krb5.conf
+
+  - name: qq
+    buildsystem: simple
+    build-commands:
+      - install -D apply_extra -t /app/bin
+      - install -D qq.sh /app/bin/qq
+      - install -D $FLATPAK_ID.metainfo.xml -t /app/share/metainfo
+      - install -D /usr/bin/desktop-file-edit -t /app/bin
+      - install -D /usr/bin/ar -t /app/bin
+      - ARCH_TRIPLE=$(gcc --print-multiarch) &&
+        install -D /usr/lib/${ARCH_TRIPLE}/libbfd-*.so -t /app/lib
+    sources:
+      - type: script
+        dest-filename: apply_extra
+        commands:
+          - ar x *.deb $(ar t *.deb|grep data)
+          - tar -xf data.* && rm *.deb data.*
+          - mv usr export && rm -r export/share/icons
+          - install -Dm644 opt/QQ/resources/app/512x512.png export/share/icons/hicolor/512x512/apps/qq.png
+          - FLATPAK_ID=com.qq.im.linuxqq
+          - desktop-file-edit 
+            --set-icon="$FLATPAK_ID" 
+            --set-key="Exec" --set-value="qq %U" 
+            export/share/applications/*.desktop
+          - rename "qq" "$FLATPAK_ID" 
+            export/share/icons/hicolor/*/apps/*.png 
+            export/share/applications/*.desktop
+
+      - type: script
+        dest-filename: qq.sh
+        commands:
+          - export TMPDIR=$XDG_RUNTIME_DIR/app/$FLATPAK_ID
+          - app_dir=/app/extra/opt/QQ
+          - exec zypak-wrapper $app_dir/qq "$@"
+
+      - type: file
+        path: com.qq.im.linuxqq.metainfo.xml
+
+      - type: extra-data
+        filename: qq.deb
+        only-arches: [x86_64]
+        url: https://dldir1.qq.com/qqfile/qq/QQNT/4691a571/QQ-v2.0.1-429_x64.deb
+        sha256: e3aa15ff6ae089b655df3913c6020ca56726bd676995aaf29b313fbd0643ea42
+        size: 108719314
